@@ -1,9 +1,63 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Two
+      Jogadores
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <div *ngIf="habilitaCampos == false">
+    <ion-list>
+      <ion-item-sliding *ngFor="let jogador of jogadores | async ">
+        <ion-item (click)="edit(jogador)">
+          <h1>{{ jogador.nome }}</h1>
+          <p>{{ jogador.sobrenome }}</p>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
+  <div *ngIf="habilitaCampos">
+    <form [formGroup]="form">
+      <ion-item>
+        <ion-label stacked>Nome</ion-label>
+        <ion-input type="text" [(ngModel)]="jogador.nome" name=nome id="nome" formControlName="nome"></ion-input>
+      </ion-item>
+      <div *ngIf="form.get('nome').hasError('required') && form.get('nome').touched">
+        <ion-item>
+          <p>
+            <font color=" #e60000" size="1">O nome é obrigatório!</font>
+          </p>
+        </ion-item>
+      </div>
+      <ion-item>
+        <ion-label stacked>Sobrenome</ion-label>
+        <ion-input type="text" [(ngModel)]="jogador.sobrenome" formControlName="sobrenome"></ion-input>
+      </ion-item>
+      <div *ngIf="form.get('sobrenome').hasError('required') && form.get('sobrenome').touched">
+        <ion-item>
+          <p>
+            <font color=" #e60000" size="1">O sobrenome é obrigatório!</font>
+          </p>
+        </ion-item>
+      </div>
+      <div text-center>
+        <ion-button type="submit" (click)="onSubmit()" [disabled]="!form.valid">Salvar</ion-button>
+        <ion-button type="reset" (click)="back()" color="warning">Voltar</ion-button>
+        <div *ngIf="jogador.key">
+          <ion-button type="submit" (click)="remove()" color="danger">Apagar</ion-button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- fab placed to the (vertical) center and end -->
+  <ion-fab vertical="bottom" horizontal="right" slot="" (click)="new()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

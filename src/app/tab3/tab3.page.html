@@ -1,9 +1,102 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Three
+      Partida
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <div *ngIf="habilitaCampos == false">
+    <ion-list>
+      <ion-item *ngFor="let partida of partidas | async" (click)="edit(partida)">
+        Local: {{ partida.local }} - Adversário: {{ partida.adversario }}
+        <br />
+        {{ partida.golPro }} x {{ partida.golContra }}
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="habilitaCampos">
+    <form [formGroup]="form">
+      <ion-item>
+        <ion-label position="stacked">Adversário</ion-label>
+        <ion-input type="text" [(ngModel)]="partida.adversario" formControlName="adversario"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Local</ion-label>
+        <ion-input type="text" [(ngModel)]="partida.local" formControlName="local"></ion-input>
+      </ion-item>
+
+      <div text-center>
+        <ion-label>Partida</ion-label>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col width-10>
+            <ion-item>
+              <ion-input type="tel" [(ngModel)]="partida.golPro" min="1" aria-placeholder="Pró" formControlName="golPro"></ion-input>
+            </ion-item>
+          </ion-col>
+          X
+          <ion-col width-10>
+            <ion-item>
+              <ion-input type="tel" [(ngModel)]="partida.golContra" min="1" formControlName="golContra"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-item>
+        <ion-label position="stacked">Data</ion-label>
+        <ion-datetime displayFormat="DD/MMM/YYYY" pickerFormat="DD MMM YYYY" monthShortNames='jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez'
+          [(ngModel)]="partida.dtPartida" formControlName="dtPartida" doneText="OK" cancelText="CANCELAR"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Vitória</ion-label>
+        <ion-select placeholder="Selecione... " [(ngModel)]="partida.vitoria" formControlName="vitoria">
+          <ion-select-option value="true">SIM</ion-select-option>
+          <ion-select-option value="false">NÃO</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Resenha</ion-label>
+        <ion-textarea [(ngModel)]="partida.resenha" formControlName="resenha"></ion-textarea>
+      </ion-item>
+
+      <div text-center>
+        <ion-button type="submit" (click)="onSubmit()" [disabled]="!form.valid">Salvar</ion-button>
+      </div>
+
+      <div text-center>
+        <ion-button type="reset" (click)="back()" color="warning">Voltar</ion-button>
+      </div>
+
+      <div text-center>
+        <div *ngIf="partida.key">
+          <ion-button type="submit" (click)="remove()" color="danger">Apagar</ion-button>
+        </div>
+      </div>
+    </form>
+
+    <div text-center>
+      <div *ngIf="partida.key">
+        <ion-button type="submit" (click)="relacionar()" color="dark">Relacionar</ion-button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- fab placed to the (vertical) center and end -->
+  <ion-fab vertical="bottom" horizontal="right" slot="" (click)="new()" *ngIf="habilitaCampos == false || habilitaRelacionar == false">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

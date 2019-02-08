@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Relacionar Atleta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <form [formGroup]="formRelacionado">
+
+    <ion-item>
+      <ion-label position="stacked">Atletas</ion-label>
+      <ion-select placeholder="Selecione... " [(ngModel)]="jogador" formControlName="jogador">
+        <ion-select-option *ngFor="let jogador of jogadores | async">{{ jogador.nome }} {{ jogador.sobrenome }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Gol(s)</ion-label>
+      <ion-input [(ngModel)]="relacionado.gols" formControlName="gols"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Amarelo</ion-label>
+      <ion-input [(ngModel)]="relacionado.amarelo" formControlName="amarelo"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Vermelho</ion-label>
+      <ion-input [(ngModel)]="relacionado.vermelho" formControlName="vermelho"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Pagamento</ion-label>
+      <ion-input [(ngModel)]="relacionado.pagamento" formControlName="pagamento"></ion-input>
+    </ion-item>
+
+    <div text-center>
+      <ion-button type="submit" (click)="onSubmitRelacionado()" [disabled]="!formRelacionado.valid">Salvar</ion-button>
+    </div>
+
+    <div text-center>
+      <ion-button type="reset" color="warning" (click)="back()">Voltar</ion-button>
+    </div>
+
+  </form>
+
+  <ion-list>
+    <ion-item *ngFor="let relacionado of relacionados | async">
+      {{ relacionado.jogador }} - Gols: {{ relacionado.gols }} - A: {{ relacionado.amarelo }} - V: {{
+      relacionado.vermelho }}
+    </ion-item>
+  </ion-list>
+
+</ion-content>
